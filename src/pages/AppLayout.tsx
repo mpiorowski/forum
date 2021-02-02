@@ -12,11 +12,14 @@ export default function AppLayout({ children }: Props) {
   const [session, loading] = useSession();
   const router = useRouter();
 
+  console.log("session", session);
+
   if (loading) {
     return <div>LOADING</div>;
   }
-  if (!session) {
-    router.push('/login');
+  if (!session && !session.user) {
+    router.push("/login");
+    return <div>LOADING</div>;
   }
   return (
     <Layout className="layout">

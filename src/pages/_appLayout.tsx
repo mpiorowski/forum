@@ -3,6 +3,7 @@ import { signIn, useSession } from "next-auth/client";
 import Link from "next/link";
 import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
+import { LoadingPage } from "../_components/LoadingPage";
 
 type Props = {
   children?: ReactElement | ReactElement[];
@@ -13,23 +14,24 @@ export default function AppLayout({ children }: Props) {
   const router = useRouter();
 
   console.log("session", session);
+  console.log("router", router);
 
   if (loading) {
-    return <div>LOADING</div>;
+    return <LoadingPage></LoadingPage>;
   }
-  if (!session && !session.user) {
-    router.push("/login");
-    return <div>LOADING</div>;
+  if (!session) {
+    router.push("/api/auth/signin");
+    return <LoadingPage></LoadingPage>;
   }
   return (
     <Layout className="layout">
       <Layout.Header>
         <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
-          <Menu.Item key="1">
+        <Menu theme="dark" mode="horizontal" selectedKeys={[router.pathname]}>
+          <Menu.Item key="/home">
             <Link href="/home">home</Link>
           </Menu.Item>
-          <Menu.Item key="2">
+          <Menu.Item key="/forum">
             <Link href="/forum">forum</Link>
           </Menu.Item>
           <Menu.Item key="/">
@@ -38,8 +40,6 @@ export default function AppLayout({ children }: Props) {
         </Menu>
       </Layout.Header>
       <Layout.Content style={{ padding: "0 50px" }}>
-        {/* div  Signed in as {session.user.email} <br /> */}
-        {/* <button onClick={() => signOut()}>Sign out</button> */}
         <Breadcrumb style={{ margin: "16px 0" }}>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
           <Breadcrumb.Item>List</Breadcrumb.Item>

@@ -1,1 +1,1 @@
-docker-compose -f db/docker-compose.db.yml up --build
+docker-compose -f db/docker-compose.db.yml up

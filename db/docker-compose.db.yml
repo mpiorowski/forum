@@ -8,6 +8,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.db
+    command: postgres -c shared_preload_libraries=pgaudit
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: 12345
@@ -15,6 +16,6 @@ services:
       PGDATA: /data/pgdata
     volumes:
       - ./dev:/data/pgdata
-      - ./migrations/init.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      # - ./migrations/init.sql:/docker-entrypoint-initdb.d/1-schema.sql
     ports:
       - "5432:5432"

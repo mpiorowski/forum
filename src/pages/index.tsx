@@ -1,6 +1,6 @@
 import { signOut, useSession } from "next-auth/client";
 import React from "react";
-import AppLayout from "./AppLayout";
+import AppLayout from "./_appLayout";
 
 export default function Page() {
   const [session, loading] = useSession();

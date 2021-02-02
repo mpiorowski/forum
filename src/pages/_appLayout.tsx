@@ -13,9 +13,6 @@ export default function AppLayout({ children }: Props) {
   const [session, loading] = useSession();
   const router = useRouter();
 
-  console.log("session", session);
-  console.log("router", router);
-
   if (loading) {
     return <LoadingPage></LoadingPage>;
   }
@@ -31,11 +28,8 @@ export default function AppLayout({ children }: Props) {
           <Menu.Item key="/home">
             <Link href="/home">home</Link>
           </Menu.Item>
-          <Menu.Item key="/forum">
-            <Link href="/forum">forum</Link>
-          </Menu.Item>
-          <Menu.Item key="/">
-            <Link href="/">main</Link>
+          <Menu.Item key="/forum/categories">
+            <Link href="/forum/categories">forum</Link>
           </Menu.Item>
         </Menu>
       </Layout.Header>

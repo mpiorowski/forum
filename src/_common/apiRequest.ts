@@ -4,7 +4,7 @@ interface Options {
   body?: string;
 }
 export const apiRequest = async <T>(options: Options): Promise<T | null> => {
-  options = Object.assign({}, options);
+  // options = Object.assign({ credentials: "include" }, options);
   const response = await fetch(options.url, options);
   if (!response.ok) {
     const message = await response.text();

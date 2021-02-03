@@ -1,9 +1,9 @@
 import { Breadcrumb, Layout, Menu } from "antd";
-import { signIn, useSession } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import Link from "next/link";
-import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
-import { LoadingPage } from "../_components/LoadingPage";
+import React, { ReactElement } from "react";
+import { LoadingPage } from "./LoadingPage";
 
 type Props = {
   children?: ReactElement | ReactElement[];
@@ -18,6 +18,10 @@ export default function AppLayout({ children }: Props) {
   }
   if (!session) {
     router.push("/api/auth/signin");
+    return <LoadingPage></LoadingPage>;
+  }
+  if (router.pathname === "/" || router.pathname === "") {
+    router.push("/forum/categories");
     return <LoadingPage></LoadingPage>;
   }
   return (

@@ -1,6 +1,6 @@
 import { signOut } from "next-auth/client";
 import React from "react";
-import AppLayout from "../_appLayout";
+import AppLayout from "../../components/_common/AppLayout";
 
 export default function Home() {
   return (

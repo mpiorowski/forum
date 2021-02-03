@@ -1,62 +1,46 @@
 -- categories table
 CREATE TABLE forum_categories (
-    category_title varchar(40) NOT NULL,
-    category_description varchar(200) NOT NULL,
-    category_icon varchar(40) NOT NULL,
-    fk_user_id integer NOT NULL REFERENCES users (id) ON DELETE RESTRICT,
+    title varchar(40) NOT NULL,
+    description varchar(200) NOT NULL,
+    icon varchar(40) NOT NULL,
+    userid integer NOT NULL REFERENCES users (id) ON DELETE RESTRICT,
     id serial PRIMARY KEY UNIQUE,
-    uid uuid DEFAULT uuid_generate_v4 () UNIQUE,
+    uuid uuid DEFAULT uuid_generate_v4 () UNIQUE,
     version int DEFAULT 1,
-    is_active boolean DEFAULT TRUE,
-    is_deleted boolean DEFAULT FALSE,
-    created_at timestamptz NOT NULL DEFAULT now(),
-    updated_at timestamptz NOT NULL DEFAULT now()
+    active boolean DEFAULT TRUE,
+    deleted boolean DEFAULT FALSE,
+    created timestamptz NOT NULL DEFAULT now(),
+    updated timestamptz NOT NULL DEFAULT now()
 );
 
 -- topics table
 CREATE TABLE forum_topics (
-    topic_title varchar(100) NOT NULL,
-    topic_description varchar(400),
-    topic_views integer DEFAULT 0,
-    fk_category_id integer NOT NULL REFERENCES forum_categories (id) ON DELETE RESTRICT,
-    fk_user_id integer NOT NULL REFERENCES users (id) ON DELETE RESTRICT,
+    title varchar(100) NOT NULL,
+    description varchar(400),
+    views integer DEFAULT 0,
+    categoryid integer NOT NULL REFERENCES forum_categories (id) ON DELETE RESTRICT,
+    userid integer NOT NULL REFERENCES users (id) ON DELETE RESTRICT,
     id serial PRIMARY KEY UNIQUE,
-    uid uuid DEFAULT uuid_generate_v4 () UNIQUE,
+    uuid uuid DEFAULT uuid_generate_v4 () UNIQUE,
     version int DEFAULT 1,
-    is_active boolean DEFAULT TRUE,
-    is_deleted boolean DEFAULT FALSE,
-    created_at timestamptz NOT NULL DEFAULT NOW(),
-    updated_at timestamptz NOT NULL DEFAULT NOW()
+    active boolean DEFAULT TRUE,
+    deleted boolean DEFAULT FALSE,
+    created timestamptz NOT NULL DEFAULT now(),
+    updated timestamptz NOT NULL DEFAULT now()
 );
 
 -- posts table
 CREATE TABLE forum_posts (
-    post_content varchar(10000) NOT NULL,
-    reply_uid uuid,
-    fk_topic_id integer NOT NULL REFERENCES forum_topics (id) ON DELETE RESTRICT,
-    fk_user_id integer NOT NULL REFERENCES users (id) ON DELETE RESTRICT,
+    content varchar(10000) NOT NULL,
+    replyuuid uuid,
+    topicid integer NOT NULL REFERENCES forum_topics (id) ON DELETE RESTRICT,
+    userid integer NOT NULL REFERENCES users (id) ON DELETE RESTRICT,
     id serial PRIMARY KEY UNIQUE,
-    uid uuid DEFAULT uuid_generate_v4 () UNIQUE,
+    uuid uuid DEFAULT uuid_generate_v4 () UNIQUE,
     version int DEFAULT 1,
-    is_active boolean DEFAULT TRUE,
-    is_deleted boolean DEFAULT FALSE,
-    created_at timestamptz NOT NULL DEFAULT NOW(),
-    updated_at timestamptz NOT NULL DEFAULT NOW()
+    active boolean DEFAULT TRUE,
+    deleted boolean DEFAULT FALSE,
+    created timestamptz NOT NULL DEFAULT now(),
+    updated timestamptz NOT NULL DEFAULT now()
 );
-
--- triggers and audits
-CREATE TRIGGER set_timestamp
-    BEFORE UPDATE ON forum_categories
-    FOR EACH ROW
-    EXECUTE PROCEDURE trigger_set_timestamp ();
-
-CREATE TRIGGER set_timestamp
-    BEFORE UPDATE ON forum_topics
-    FOR EACH ROW
-    EXECUTE PROCEDURE trigger_set_timestamp ();
-
-CREATE TRIGGER set_timestamp
-    BEFORE UPDATE ON forum_posts
-    FOR EACH ROW
-    EXECUTE PROCEDURE trigger_set_timestamp ();
 

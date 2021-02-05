@@ -4,27 +4,19 @@ import { useQuery } from "react-query";
 import { CategoryList } from "../../../components/forum/categories/CategoryList";
 import { Category } from "../../../components/forum/_common/forumTypes";
 import AppLayout from "../../../components/_common/AppLayout";
-import { apiRequest } from "../../../_common/apiRequest";
+import { categoriesApi } from "../../api/categories";
 
-export const apiFindAllCategory = () => {
-  return apiRequest<Category[]>({
-    url: "http://localhost:3000/api/categories",
-    method: "GET",
-  });
+export const apiFindAllCategory = async () => {
+  const data = await fetch("http://localhost:3000/api/categories");
+  return data.json();
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  try {
-    const categories = await apiFindAllCategory();
-    return {
-      props: { categories, revalidate: 5 },
-    };
-  } catch (error) {
-    console.log(error.message);
-    return {
-      props: {},
-    };
-  }
+  const data = await categoriesApi("GET", null, null);
+  const categories = JSON.parse(data);
+  return {
+    props: { categories },
+  };
 };
 
 export default function Categories({ categories }: { categories: Category[] }) {

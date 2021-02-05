@@ -8,7 +8,7 @@ export const apiRequest = async <T>(options: Options): Promise<T | null> => {
   const response = await fetch(options.url, options);
   if (!response.ok) {
     const message = await response.text();
-    throw new Error(message);
+    // throw new Error(message);
   } else if (response.status === 204) {
     return null;
   } else {

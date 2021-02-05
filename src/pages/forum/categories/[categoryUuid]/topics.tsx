@@ -1,54 +1,45 @@
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import { Topic } from "../../../../components/forum/_common/forumTypes";
+import { TopicsList } from "../../../../components/forum/topics/TopicsList";
+import { apiFindAllTopics, apiFindCategoryByUuid } from "../../../../components/forum/_common/forumApis";
+import { Category, Topic } from "../../../../components/forum/_common/forumTypes";
 import AppLayout from "../../../../components/_common/AppLayout";
-import { apiRequest } from "../../../../_common/apiRequest";
+import { categoriesApi } from "../../../api/categories";
+import { categoryApi } from "../../../api/categories/[categoryUuid]";
+import { topicsApi } from "../../../api/categories/[categoryUuid]/topics";
 
-export const apiFindAllCategory = () => {
-  return apiRequest<Topic[]>({
-    url: "http://localhost:3000/api/categories",
-    method: "GET",
-  });
-};
-
-// This function gets called at build time
 export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
-  const res = await fetch('http://localhost:3000/api/categories')
-  const posts = await res.json()
+  const data = await categoriesApi("GET", null, null);
+  const categories: Category[] = JSON.parse(data);
+  const paths = categories.map((category) => ({
+    params: { categoryUuid: category.uuid },
+  }));
 
-  // Get the paths we want to pre-render based on posts
-  const paths = posts.map((post) => ({
-    params: { id: post.id },
-  }))
-
-  // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
-  return { paths, fallback: false }
+  return { paths, fallback: false };
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  try {
-    const categories = await apiFindAllCategory();
-    return {
-      props: { categories, revalidate: 5 },
-    };
-  } catch (error) {
-    console.log(error.message);
-    return {
-      props: {},
-    };
-  }
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const dataCategory = await categoryApi("GET", { categoryUuid: params.categoryUuid });
+  const category = JSON.parse(dataCategory);
+  const dataTopics = await topicsApi("GET", { categoryUuid: params.categoryUuid });
+  const topics = JSON.parse(dataTopics);
+  return { props: { category, topics } };
 };
 
-export const Topics = () => {
+type Props = {
+  topics: Topic[];
+  category: Category;
+};
+
+export const Topics = ({ category, topics }: Props) => {
   const router = useRouter();
   const { categoryUuid } = router.query;
+
   return (
     <AppLayout>
-      <div>Topics</div>
-      <div>{categoryUuid}</div>
+      <TopicsList topics={topics} category={category}></TopicsList>
     </AppLayout>
   );
 };

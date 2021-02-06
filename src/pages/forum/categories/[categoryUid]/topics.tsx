@@ -1,19 +1,18 @@
-import { GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import { TopicsList } from "../../../../components/forum/topics/TopicsList";
-import { apiFindAllTopics, apiFindCategoryByUuid } from "../../../../components/forum/_common/forumApis";
 import { Category, Topic } from "../../../../components/forum/_common/forumTypes";
 import AppLayout from "../../../../components/_common/AppLayout";
 import { categoriesApi } from "../../../api/categories";
-import { categoryApi } from "../../../api/categories/[categoryUuid]";
-import { topicsApi } from "../../../api/categories/[categoryUuid]/topics";
+import { categoryApi } from "../../../api/categories/[categoryUid]";
+import { topicsApi } from "../../../api/categories/[categoryUid]/topics";
 
 export async function getStaticPaths() {
-  const data = await categoriesApi("GET", null, null);
+  const data = await categoriesApi("GET");
   const categories: Category[] = JSON.parse(data);
   const paths = categories.map((category) => ({
-    params: { categoryUuid: category.uuid },
+    params: { categoryUid: category.uid },
   }));
 
   // { fallback: false } means other routes should 404.
@@ -21,9 +20,9 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const dataCategory = await categoryApi("GET", { categoryUuid: params.categoryUuid });
+  const dataCategory = await categoryApi(params.categoryUid as string, "GET");
   const category = JSON.parse(dataCategory);
-  const dataTopics = await topicsApi("GET", { categoryUuid: params.categoryUuid });
+  const dataTopics = await topicsApi(params.categoryUid as string, "GET", null);
   const topics = JSON.parse(dataTopics);
   return { props: { category, topics } };
 };
@@ -34,9 +33,6 @@ type Props = {
 };
 
 export const Topics = ({ category, topics }: Props) => {
-  const router = useRouter();
-  const { categoryUuid } = router.query;
-
   return (
     <AppLayout>
       <TopicsList topics={topics} category={category}></TopicsList>

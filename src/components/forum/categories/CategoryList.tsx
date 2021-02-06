@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Col, List, Row, Skeleton } from "antd";
 import Link from "next/link";
 import React, { useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { Category } from "../_common/forumTypes";
 import { CategoryDrawer } from "./CategoryDrawer";
 
@@ -14,9 +14,9 @@ interface Props {
 
 export const CategoryList = ({ categories }: Props) => {
   const dispatch = useDispatch();
-
   const [drawerVisibility, setDrawerVisibility] = useState(false);
   library.add(fas, faPenAlt);
+
   return (
     <div>
       <Button onClick={() => setDrawerVisibility(true)}>Dodaj kategorię</Button>
@@ -35,7 +35,7 @@ export const CategoryList = ({ categories }: Props) => {
                     title={
                       <div style={{ fontSize: 18 }} className={"cat-topic-header"}>
                         {/* <FontAwesomeIcon icon={category.icon as IconProp} className={"cat-topic-icon"} /> */}
-                        <Link href={"/forum/categories/" + category.uuid + "/topics"}>{category.title}</Link>
+                        <Link href={"/forum/categories/" + category.uid + "/topics"}>{category.title}</Link>
                       </div>
                     }
                     description={<div>{category.description}</div>}

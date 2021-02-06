@@ -24,15 +24,16 @@ export default function AppLayout({ children }: Props) {
     router.push("/forum/categories");
     return <LoadingPage></LoadingPage>;
   }
+
   return (
     <Layout className="layout">
       <Layout.Header>
         <div className="logo" />
-        <Menu theme="dark" mode="horizontal" selectedKeys={[router.pathname]}>
+        <Menu theme="dark" mode="horizontal" selectedKeys={["/" + router.pathname.split("/")[1]]}>
           <Menu.Item key="/home">
             <Link href="/home">home</Link>
           </Menu.Item>
-          <Menu.Item key="/forum/categories">
+          <Menu.Item key="/forum">
             <Link href="/forum/categories">forum</Link>
           </Menu.Item>
         </Menu>

@@ -1,10 +1,10 @@
 import { GetStaticProps } from "next";
 import React from "react";
 import { useQuery } from "react-query";
-import { CategoryList } from "../../../components/forum/categories/CategoryList";
-import { Category } from "../../../components/forum/_common/forumTypes";
-import AppLayout from "../../../components/_common/AppLayout";
-import { categoriesApi } from "../../api/categories";
+import { CategoryList } from "../../components/forum/categories/CategoryList";
+import { Category } from "../../components/forum/_common/forumTypes";
+import AppLayout from "../../components/_common/AppLayout";
+import { categoriesApi } from "../api/categories";
 
 export const apiFindAllCategory = async () => {
   const data = await fetch("http://localhost:3000/api/categories");

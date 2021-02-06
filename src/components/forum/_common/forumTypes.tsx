@@ -1,6 +1,6 @@
 export type Category = {
   id?: string;
-  uuid?: string;
+  uid?: string;
   title: string;
   description?: string;
   icon?: string;
@@ -15,10 +15,19 @@ export type Category = {
 
 export type Topic = {
   id?: string;
-  uuid?: string;
+  uid?: string;
   title: string;
   description?: string;
   views: string;
   categoryid: string;
+  userid: string;
+};
+
+export type Post = {
+  id?: string;
+  uid?: string;
+  content: string;
+  replyid?: string;
+  topicid: string;
   userid: string;
 };
